@@ -1,0 +1,22 @@
+{
+  "name": "point-estimation-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "wss.ts",
+  "scripts": {
+    "start": "node out/wss.js",
+    "prestart": "npm run build",
+    "build": "tsc",
+    "dev": "npx tsc ./wss.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.17.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.10",
+    "flatted": "^3.3.1",
+    "typescript": "^5.4.5"
+  }
+}
