@@ -82,6 +82,7 @@ interface IWSBoard {
   roomID: string;
   userData: {
     ID: string;
+    SortType: ESORTTYPE;
     UserName: string;
     CardID: string;
     Content: string;

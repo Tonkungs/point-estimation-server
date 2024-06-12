@@ -256,16 +256,32 @@ function actionMessage(ws: WebSocket, data: string) {
         sendData(roomData);
         break;
       case EActionBoard.SORTING_BOARD:
-        // roomData = Rooms.get(roomID) as IBoard;
-        // roomData.SortType = userData.SortType;
-        // Rooms.set(roomID, roomData);
-        // sendData(roomData);
+        roomData = Rooms.get(roomID) as IBoard;
+        roomData.SortType = userData.SortType;
+
+        switch (userData.SortType) {
+          case ESORTTYPE.ASC:
+            roomData.Boards.sort((a, b) => a.Like - b.Like);
+            break;
+          case ESORTTYPE.DESC:
+            roomData.Boards.sort((a, b) => b.Like - a.Like);
+            break;
+          default:
+            roomData.Boards.sort((a, b) => a.UserID.localeCompare(b.UserID));
+            break;
+        }
+
+        roomData.Boards = [...roomData.Boards];
+        Rooms.set(roomID, roomData);
+        sendData(roomData);
         break;
       case EActionBoard.IS_TIME_BOARD:
         roomData = Rooms.get(roomID) as IBoard;
         roomData.IsTime = !roomData.IsTime;
 
         if (roomData.IsTime) {
+          roomData.IsBlur = true;
+          roomData.IsEdit = true;
           const split = roomData.TimeStart.split(":");
           let newTime: number = parseInt(split[0]);
           let newSecond: number = parseInt(split[1]);
@@ -290,6 +306,7 @@ function actionMessage(ws: WebSocket, data: string) {
             }
           }, 1000);
         } else {
+          roomData.IsEdit = false;
           clearInterval(roomData.TimeFunc);
           Rooms.set(roomID, roomData);
           sendData(roomData);
